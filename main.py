@@ -110,10 +110,13 @@ def main():
     # scraping
     ###########
     with sync_playwright() as p:
+        # Set up browser with English language
         browser = p.chromium.launch(headless=False)
-        page = browser.new_page()
+        context = browser.new_context(locale='en-US')
+        page = context.new_page()
 
-        page.goto("https://www.google.com/maps", timeout=60000)
+        # Go to Google Maps and force English interface
+        page.goto("https://www.google.com/maps?hl=en", timeout=60000)
         # wait is added for dev phase. can remove it in production
         page.wait_for_timeout(5000)
         
@@ -181,52 +184,70 @@ def main():
                     listing.click()
                     page.wait_for_timeout(5000)
 
-                    name_attibute = 'aria-label'
+                    # XPath selectors
+                    name_xpath = '//h1[contains(@class, "DUwDvf")]'
                     address_xpath = '//button[@data-item-id="address"]//div[contains(@class, "fontBodyMedium")]'
                     website_xpath = '//a[@data-item-id="authority"]//div[contains(@class, "fontBodyMedium")]'
                     phone_number_xpath = '//button[contains(@data-item-id, "phone:tel:")]//div[contains(@class, "fontBodyMedium")]'
-                    review_count_xpath = '//button[@jsaction="pane.reviewChart.moreReviews"]//span'
-                    reviews_average_xpath = '//div[@jsaction="pane.reviewChart.moreReviews"]//div[@role="img"]'
-                    
-                    
+                    rating_xpath = '//div[contains(@class, "F7nice")]'
+
                     business = Business()
-                   
-                    if len(listing.get_attribute(name_attibute)) >= 1:
-        
-                        business.name = listing.get_attribute(name_attibute)
-                    else:
+                    
+                    # Wait for the main content to load
+                    page.wait_for_selector(name_xpath, timeout=5000)
+                    
+                    # Get name (with fallbacks)
+                    try:
+                        if page.locator(name_xpath).count() > 0:
+                            business.name = page.locator(name_xpath).first.inner_text().strip()
+                        else:
+                            # Try alternative selectors
+                            alt_name_xpath = '//div[contains(@class, "DUwDvf")]'
+                            if page.locator(alt_name_xpath).count() > 0:
+                                business.name = page.locator(alt_name_xpath).first.inner_text().strip()
+                            else:
+                                business.name = ""
+                    except Exception as e:
+                        print(f"Error extracting name: {e}")
                         business.name = ""
+
+                    # Get address
                     if page.locator(address_xpath).count() > 0:
-                        business.address = page.locator(address_xpath).all()[0].inner_text()
+                        business.address = page.locator(address_xpath).first.inner_text().strip()
                     else:
                         business.address = ""
+
+                    # Get website
                     if page.locator(website_xpath).count() > 0:
-                        business.website = page.locator(website_xpath).all()[0].inner_text()
+                        business.website = page.locator(website_xpath).first.inner_text().strip()
                     else:
                         business.website = ""
+
+                    # Get phone number
                     if page.locator(phone_number_xpath).count() > 0:
-                        business.phone_number = page.locator(phone_number_xpath).all()[0].inner_text()
+                        business.phone_number = page.locator(phone_number_xpath).first.inner_text().strip()
                     else:
                         business.phone_number = ""
-                    if page.locator(review_count_xpath).count() > 0:
-                        business.reviews_count = int(
-                            page.locator(review_count_xpath).inner_text()
-                            .split()[0]
-                            .replace(',','')
-                            .strip()
-                        )
-                    else:
-                        business.reviews_count = ""
-                        
-                    if page.locator(reviews_average_xpath).count() > 0:
-                        business.reviews_average = float(
-                            page.locator(reviews_average_xpath).get_attribute(name_attibute)
-                            .split()[0]
-                            .replace(',','.')
-                            .strip())
-                    else:
-                        business.reviews_average = ""
-                    
+
+                    # Get rating and review count
+                    try:
+                        if page.locator(rating_xpath).count() > 0:
+                            rating_text = page.locator(rating_xpath).first.inner_text()
+                            parts = rating_text.split('(')
+                            if len(parts) >= 2:
+                                business.reviews_average = float(parts[0].strip())
+                                # Extract only digits from the review count
+                                business.reviews_count = int(''.join(filter(str.isdigit, parts[1])))
+                            else:
+                                business.reviews_average = 0.0
+                                business.reviews_count = 0
+                        else:
+                            business.reviews_average = 0.0
+                            business.reviews_count = 0
+                    except Exception as e:
+                        print(f"Error extracting rating: {e}")
+                        business.reviews_average = 0.0
+                        business.reviews_count = 0
                     
                     business.latitude, business.longitude = extract_coordinates_from_url(page.url)
 
