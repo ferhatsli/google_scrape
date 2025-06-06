@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Google Maps Scraper
 
 A Python-based scraper that uses Playwright to extract restaurant data from Google Maps.
@@ -46,3 +47,6 @@ The script generates two output files in the `output` directory:
 
 ## Note
 This script is for educational purposes only. Please respect Google's terms of service and rate limits when using this tool.
+=======
+# google_scrape
+>>>>>>> 70c3a49d124002bb0d74d1c7bdbf62c9442721aa
