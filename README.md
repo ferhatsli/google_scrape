@@ -1,44 +1,48 @@
 # Google Maps Scraper
 
-This is simple scraper that uses Playwright to extract data from Google Maps. 
+A Python-based scraper that uses Playwright to extract restaurant data from Google Maps.
 
-This example is made for educational purposese.
+## Features
+- Extracts restaurant information including:
+  - Name
+  - Address
+  - Website
+  - Phone number
+  - Reviews count
+  - Average rating
+  - Location coordinates (latitude/longitude)
+- Saves data in both Excel and CSV formats
+- Customizable search parameters
+- Language control (forced to English)
 
-This scrapit is easy to customize.
+## Installation
+1. (Optional) Create & activate a virtual environment:
+   ```bash
+   virtualenv venv
+   source venv/bin/activate
+   ```
 
-check both Excel & CSV files (google_maps_data) to see how final data will look like. 
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   playwright install chromium
+   ```
 
-## To Install:
-- (Optional: create & activate a virtual environment) `virtualenv venv`, then `source venv/bin/activate`
+## Usage
+Run the script with the following command:
+```bash
+python3 main.py -s="<search query>" -t=<number of results>
+```
 
-- `pip install -r requirements.txt`
-- `playwright install chromium`
+Example:
+```bash
+python3 main.py -s="Dubai restaurants" -t=15
+```
 
-## to Run:
-### A single search:
-- `python3 main.py -s=<what & where to search for> -t=<how many>`
+## Output
+The script generates two output files in the `output` directory:
+- Excel file: `google_maps_data_<search_query>.xlsx`
+- CSV file: `google_maps_data_<search_query>.csv`
 
-### Multiple searches at once
-1. Add searches in `input.txt`, each search should be in a new line as shown in the example (check `input.txt`)
-2. Then run: `python3 main.py` 
-3. If you pass `-t=<how many>` it will be applied to all the searches. 
-
-## Tips:
-If you want to search more than the limited 120 results, detail you search more and as granular as you need it to be in the `input.txt`, for example:
-
-- Instead of using:
-
-`United states dentist`
-
-- Use:
-
-`Unites States Boston dentist`
-
-`Unites States New York dentist`
-
-`Unites States Texas dentist`
-
-And so on... 
-
-
-
+## Note
+This script is for educational purposes only. Please respect Google's terms of service and rate limits when using this tool.
