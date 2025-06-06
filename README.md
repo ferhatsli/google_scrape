@@ -1,52 +1,86 @@
-<<<<<<< HEAD
-# Google Maps Scraper
+# 📍 Google Maps Scraper
 
-A Python-based scraper that uses Playwright to extract restaurant data from Google Maps.
+A Python-based scraper using **Playwright** to extract structured restaurant data from Google Maps.
 
-## Features
-- Extracts restaurant information including:
-  - Name
-  - Address
-  - Website
-  - Phone number
-  - Reviews count
-  - Average rating
-  - Location coordinates (latitude/longitude)
-- Saves data in both Excel and CSV formats
-- Customizable search parameters
-- Language control (forced to English)
+> ⚙️ Originally based on an open-source implementation — now enhanced with better stability, parsing, and output control.
 
-## Installation
-1. (Optional) Create & activate a virtual environment:
-   ```bash
-   virtualenv venv
-   source venv/bin/activate
-   ```
+---
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   playwright install chromium
-   ```
+## 🎥 Demo Video
 
-## Usage
-Run the script with the following command:
+[![Watch the demo](https://img.youtube.com/vi/YaqTiqq2Wjg/0.jpg)](https://www.youtube.com/watch?v=YaqTiqq2Wjg)
+
+> Real-time scraping session showing how restaurant data is collected from Google Maps.
+
+---
+
+## ✨ Features
+
+- Extracts detailed restaurant information including:  
+  ✅ Name, Address, Website, Phone Number  
+  ✅ Reviews count, Average Rating  
+  ✅ Location (latitude/longitude)
+- Exports results to **Excel** and **CSV** formats  
+- Customizable search queries (`-s`) and result limits (`-t`)  
+- Forces Google Maps interface to **English** for consistent scraping  
+- Stable scraping using **Playwright + Chromium** automation  
+- Improvements include: better timeout handling, retry logic, and modular code
+
+---
+
+## 🚀 Installation
+
 ```bash
-python3 main.py -s="<search query>" -t=<number of results>
+# (Optional) Create and activate a virtual environment
+virtualenv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+playwright install chromium
 ```
 
-Example:
-```bash
+⸻
+
+## 🧪 Usage
+
 python3 main.py -s="Dubai restaurants" -t=15
-```
 
-## Output
-The script generates two output files in the `output` directory:
-- Excel file: `google_maps_data_<search_query>.xlsx`
-- CSV file: `google_maps_data_<search_query>.csv`
+Flag	Description
+-s	Search query (e.g. city + category)
+-t	Number of results to collect
 
-## Note
-This script is for educational purposes only. Please respect Google's terms of service and rate limits when using this tool.
-=======
-# google_scrape
->>>>>>> 70c3a49d124002bb0d74d1c7bdbf62c9442721aa
+
+⸻
+
+## 📁 Output
+
+Results are saved in the output/ folder:
+	•	✅ google_maps_data_<search_query>.xlsx
+	•	✅ google_maps_data_<search_query>.csv
+
+⸻
+
+## 📚 Notes
+	•	This script is for educational and testing purposes only
+	•	Please respect Google’s Terms of Service
+	•	Add delays or proxies if used at scale to prevent blocking
+
+⸻
+
+## 👨‍💻 Contributions
+
+This repo was originally forked and extended to include:
+	•	🛠 Modular function separation
+	•	🧠 Parsing logic improvements
+	•	🌐 Better search consistency across locales
+	•	📦 Output handling and file naming conventions
+
+⸻
+
+## 📧 Contact
+
+ferhatsli63@gmail.com <br>
+linkedin.com/in/ferhat-taşlı-674953218
+
+⸻
